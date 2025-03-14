@@ -31,7 +31,7 @@ export function EventCreationChatbot() {
     {
       id: "1",
       role: "assistant",
-      content: "Welcome to the UW Room Booking System! What date would you like to book a room? (Please enter in M/D/YYYY format)",
+      content: "Welcome to the Locali AI Event Creation System! What date would you like to book a room? (Please enter in M/D/YYYY format)",
     },
   ])
   const [input, setInput] = useState("")
@@ -213,11 +213,15 @@ What is the name of your event?`;
 
       case 4: // Event name entry
         setBookingState(prev => ({ ...prev, eventName: input, step: 5 }))
-        assistantResponse.content = suggestContentForEvent(input);
+        assistantResponse.content = `Would you like me to generate a suggested content agenda for your ${input} event?`;
         break;
 
-      case 5: // Final confirmation
-        assistantResponse.content = "Great! Your event has been created with the suggested content. Would you like to add any additional details or make any changes?";
+      case 5: // Suggest content
+        if (input.toLowerCase().includes('yes') || input.toLowerCase().includes('sure') || input.toLowerCase().includes('ok')) {
+          assistantResponse.content = suggestContentForEvent(bookingState.eventName || "");
+        } else {
+          assistantResponse.content = "No problem! Your event has been created. Would you like to add any additional details or make any changes?";
+        }
         setBookingState(prev => ({ ...prev, step: 6 }))
         break;
 
